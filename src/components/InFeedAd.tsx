@@ -1,16 +1,24 @@
 import React from 'react';
-// The separate CSS file is no longer needed
+import type { Ad } from '../types';
 
-const InFeedAd: React.FC = () => {
+interface InFeedAdProps {
+  ad: Ad;
+}
+
+const InFeedAd: React.FC<InFeedAdProps> = ({ ad }) => {
   return (
-    <div 
-      className="w-full h-64 bg-stone-200 border border-dashed border-gray-400 
-                 flex items-center justify-center 
-                 text-gray-500 font-bold 
-                 rounded-lg my-4"
+    <a 
+      href={ad.url} 
+      target="_blank" 
+      rel="noopener noreferrer" 
+      className="block w-full rounded-lg overflow-hidden shadow-lg transition-transform transform hover:scale-[1.02] duration-300"
     >
-      <p>Space for Advertisement</p>
-    </div>
+      <img 
+        src={ad.imageUrl} 
+        alt="Advertisement" 
+        className="w-full h-auto object-cover" 
+      />
+    </a>
   );
 };
 

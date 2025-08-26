@@ -16,14 +16,15 @@ export interface Article {
 /**
  * Defines the structure for an event.
  */
-export interface Event {
-  type: 'event';
+export type Event = {
+  type: string;
   id: number;
   title: string;
   date: string;
   location: string;
   imageUrl: string;
-}
+  url: string;
+};
 
 /**
  * Defines the structure for a product review.
@@ -38,8 +39,10 @@ export interface ProductReview {
 }
 
 export interface Ad {
-  type: 'ad';
-  id: string; // e.g., 'ad-in-feed-1'
+  type: 'side-ad' | 'in-feed-ad' | 'top-banner-ad';
+  id: string;
+  imageUrl: string;
+  url: string;
 }
 
 export interface Plant {

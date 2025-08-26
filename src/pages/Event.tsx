@@ -1,9 +1,10 @@
+// Event.tsx
 import React from 'react';
-import { events } from '../data/events'; // Mengambil data dari file events
-import EventCard from '../components/EventCard'; // Menggunakan kembali komponen EventCard
+import { events } from '../data/events';
+import EventCard from '../components/EventCard';
 
 const Event: React.FC = () => {
-  // Jika tidak ada data event, tampilkan pesan
+  // Pastikan ada event yang tersedia sebelum mencoba mengaksesnya
   if (!events || events.length === 0) {
     return (
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
@@ -13,14 +14,12 @@ const Event: React.FC = () => {
     );
   }
 
-  // Pisahkan event pertama sebagai 'featured' dan sisanya sebagai 'other'
   const featuredEvent = events[0];
   const otherEvents = events.slice(1);
 
   return (
     <div className="bg-stone-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-
         {/* Header Halaman */}
         <div className="text-center mb-12">
           <h2 className="text-4xl sm:text-5xl font-bold text-green-800 mb-4">
@@ -58,7 +57,11 @@ const Event: React.FC = () => {
                   <span>{featuredEvent.location}</span>
                 </p>
               </div>
-              <a href="#" className="inline-block bg-green-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300">
+              <a 
+                href={featuredEvent.url || '#'} // Gunakan fallback '#' jika url tidak ada
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className="inline-block bg-green-800 text-white font-bold py-3 px-6 rounded-lg hover:bg-green-700 transition-colors duration-300">
                 Daftar Sekarang
               </a>
             </div>
@@ -78,7 +81,6 @@ const Event: React.FC = () => {
             </div>
           </section>
         )}
-        
       </div>
     </div>
   );

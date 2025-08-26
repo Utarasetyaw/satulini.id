@@ -1,25 +1,31 @@
 import React from 'react';
-// Tidak perlu import './SideAd.css' lagi
+import type { Ad } from '../types';
 
 interface SideAdProps {
   position: 'left' | 'right';
+  ad: Ad;
 }
 
-const SideAd: React.FC<SideAdProps> = ({ position }) => {
+const SideAd: React.FC<SideAdProps> = ({ position, ad }) => {
   return (
-    <div 
+    <div
       className={`
-        hidden 2xl:block absolute top-44 w-40 h-[600px] z-10
+        hidden 2xl:block absolute top-44 z-10
         ${position === 'left' ? 'left-5' : 'right-5'}
       `}
     >
-      <div 
-        className="w-full h-full bg-stone-200 border border-dashed border-gray-300 
-                   flex items-center justify-center 
-                   text-gray-500 font-bold rounded-md"
+      <a
+        href={ad.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block rounded-md overflow-hidden"
       >
-        Space for Advertisement
-      </div>
+        <img
+          src={ad.imageUrl}
+          alt="Advertisement"
+          className="block w-full h-auto object-cover"
+        />
+      </a>
     </div>
   );
 };

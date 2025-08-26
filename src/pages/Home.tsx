@@ -45,8 +45,18 @@ const Home: React.FC = () => {
   const specialContent: (Event | ProductReview | Ad)[] = [
     ...(events),
     ...(reviews),
-    { type: "ad" as const, id: 'in-feed-ad-1' },
-    { type: "ad" as const, id: 'in-feed-ad-2' },
+    {
+      type: "in-feed-ad",
+      id: 'in-feed-ad-1',
+      imageUrl: '', // or a placeholder image URL
+      url: '',      // or a placeholder url
+    } as Ad,
+    {
+      type: "in-feed-ad",
+      id: 'in-feed-ad-2',
+      imageUrl: '',
+      url: '',
+    } as Ad,
   ].sort(() => 0.5 - Math.random());
 
   let specialContentIndex = 0;
@@ -60,8 +70,8 @@ const Home: React.FC = () => {
 
   return (
     <div className="relative w-full"> {/* .home-wrapper */}
-      <SideAd position="left" />
-      <SideAd position="right" />
+      <SideAd position="left" ad={{ type: "side-ad", id: "side-ad-left", imageUrl: "", url: "" }} />
+      <SideAd position="right" ad={{ type: "side-ad", id: "side-ad-right", imageUrl: "", url: "" }} />
       <AdBanner type="top" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> {/* .page-container */}
@@ -113,15 +123,28 @@ const Home: React.FC = () => {
               {contentFeed.map((item) => {
                 switch (item.type) {
                   case 'article':
-                    return <ArticleCard key={`feed-article-${item.id}`} layout="horizontal" {...item} />;
+                    // Type guard to ensure item is Article
+                    if ('excerpt' in item) {
+                      return (
+                        <ArticleCard
+                          key={`feed-article-${item.id}`}
+                          title={item.title}
+                          excerpt={item.excerpt}
+                          imageUrl={item.imageUrl}
+                          category={item.category}
+                          layout="horizontal"
+                        />
+                      );
+                    }
+                    return null;
                   case 'event':
                     return <EventCard key={`feed-event-${item.id}`} event={item} />;
                   case 'review':
-                    return <ReviewCard key={`feed-review-${item.id}`} review={item} />;
-                  case 'ad':
-                    return <InFeedAd key={item.id} />;
-                  default:
+                    if ('productName' in item && 'rating' in item && 'summary' in item) {
+                      return <ReviewCard key={`feed-review-${item.id}`} review={item} />;
+                    }
                     return null;
+                  case 'ad':
                 }
               })}
             </div>
