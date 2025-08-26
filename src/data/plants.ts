@@ -1,58 +1,60 @@
-import type { Plant } from '../types';
+export interface Store {
+  name: string;
+  url: string;
+}
+
+export interface Plant {
+  id: number;
+  name: string;
+  scientificName: string;
+  family: string;
+  description: string;
+  imageUrl: string;
+  careLevel: 'Mudah' | 'Sedang' | 'Sulit';
+  size: 'Kecil' | 'Sedang' | 'Besar';
+  stores: Store[];
+}
 
 export const plants: Plant[] = [
   {
-    type: 'plant',
     id: 1,
     name: "Lidah Mertua",
     scientificName: "Sansevieria trifasciata",
     family: "Asparagaceae",
-    description: "Tanaman sukulen yang sangat populer karena perawatannya yang mudah dan kemampuannya membersihkan udara.",
-        imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
+    description: "Tanaman sukulen yang sangat populer karena perawatannya yang mudah dan kemampuannya membersihkan udara. Tahan terhadap berbagai kondisi, menjadikannya pilihan ideal untuk pemula.",
+    imageUrl: "https://gardening.id/wp-content/uploads/2019/02/lidah-mertua-2.jpg",
+    careLevel: 'Mudah',
+    size: 'Sedang',
+    stores: [
+      { name: 'Urban Gardening', url: 'https://gardening.id/' },
+      { name: 'lucknow nursery', url: 'https://lucknownursery.com/product/excoecaria-bicolor-laila-majnu-plant/' },
+    ]
   },
   {
-    type: 'plant',
     id: 2,
     name: "Sirih Gading",
     scientificName: "Epipremnum aureum",
     family: "Araceae",
-    description: "Tanaman merambat yang kuat dan mudah diperbanyak, cocok untuk pemula dan bisa hidup di berbagai kondisi cahaya.",
-    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
+    description: "Tanaman merambat yang kuat dan mudah diperbanyak, cocok untuk pemula dan bisa hidup di berbagai kondisi cahaya. Dapat ditanam di pot gantung atau dibiarkan merambat di dinding.",
+    imageUrl: "https://thecontentedplant.com/wp-content/uploads/2021/03/Untitled-design-26-520x520.jpg",
+    careLevel: 'Mudah',
+    size: 'Sedang',
+    stores: [
+      { name: 'the contented plant', url: 'https://thecontentedplant.com/marble-queen-pothos-epipremnum-aureum/' },
+    ]
   },
   {
-    type: 'plant',
     id: 3,
     name: "Monstera Deliciosa",
     scientificName: "Monstera deliciosa",
     family: "Araceae",
-    description: "Ikon tanaman hias dengan daun terbelah yang khas. Memberikan nuansa tropis yang kental pada ruangan.",
-    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
+    description: "Ikon tanaman hias dengan daun terbelah yang khas. Memberikan nuansa tropis yang kental pada ruangan dan menjadi pusat perhatian.",
+    imageUrl: "https://tse2.mm.bing.net/th/id/OIP.h-TIxlmb4lUpkQvk33iRagHaFj?cb=thfc1&rs=1&pid=ImgDetMain&o=7&rm=3",
+    careLevel: 'Sedang',
+    size: 'Besar',
+    stores: [
+      { name: 'liarock', url: 'https://www.bing.com/images/search?view=detailV2&ccid=h%2bTIxlmb&id=AEC9632DB2EBB36CF6C2DE28B32F38DCD2A15202&thid=OIP.h-TIxlmb4lUpkQvk33iRagHaFj&mediaurl=https%3a%2f%2fliarock.com%2fwp-content%2fuploads%2f2022%2f11%2fmonstera-deliciosa-2048x1536.jpeg&exph=1536&expw=2048&q=Monstera+Deliciosa&FORM=IRPRST&ck=585D50CF3BD4F23C054273F32EC4E994&selectedIndex=8&itb=0&mode=overlay' },
+    ]
   },
-  {
-    type: 'plant',
-    id: 4,
-    name: "Fiddle Leaf Fig",
-    scientificName: "Ficus lyrata",
-    family: "Moraceae",
-    description: "Tanaman dengan daun besar berbentuk biola yang dramatis, membutuhkan cahaya terang dan perhatian ekstra.",
-    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
-  },
-  {
-    type: 'plant',
-    id: 5,
-    name: "Calathea Orbifolia",
-    scientificName: "Calathea orbifolia",
-    family: "Marantaceae",
-    description: "Dikenal karena daunnya yang lebar dengan corak garis-garis perak yang elegan. Daunnya bergerak naik turun.",
-    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
-  },
-  {
-    type: 'plant',
-    id: 6,
-    name: "Spider Plant",
-    scientificName: "Chlorophytum comosum",
-    family: "Asparagaceae",
-    description: "Sangat mudah dirawat dan menghasilkan 'anak' tanaman yang menjuntai, cocok sebagai tanaman gantung.",
-    imageUrl: "https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=500&q=80",
-  },
+  // Tambahkan tanaman lainnya di sini
 ];

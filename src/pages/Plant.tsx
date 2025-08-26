@@ -1,14 +1,16 @@
-import React, { useState, useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import type { FC } from 'react';
+import { useTranslation } from 'react-i18next';
 import { plants } from '../data/plants';
 import PlantCard from '../components/PlantCard';
+import { Search } from 'lucide-react';
 
-const Plant: React.FC = () => {
+const PlantPage: FC = () => {
+  const { t } = useTranslation();
   const [searchTerm, setSearchTerm] = useState('');
 
   const filteredPlants = useMemo(() => {
-    if (!searchTerm.trim()) {
-      return plants;
-    }
+    if (!searchTerm.trim()) return plants;
     const lowercasedFilter = searchTerm.toLowerCase();
     return plants.filter(plant =>
       plant.name.toLowerCase().includes(lowercasedFilter) ||
@@ -17,50 +19,36 @@ const Plant: React.FC = () => {
   }, [searchTerm]);
 
   return (
-    // `.page-container` -> `max-w-7xl mx-auto px-4 sm:px-6 lg:px-8`
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      
-      {/* Header Halaman */}
-      {/* `.page-header` -> `text-center mb-12` */}
-      <div className="text-center mb-12">
-        <h2 className="text-4xl sm:text-5xl font-bold text-green-800 mb-4">
-          Galeri Tanaman
-        </h2>
-        <p className="text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed">
-          Jelajahi berbagai jenis tanaman populer untuk mempercantik rumah Anda. Gunakan pencarian untuk menemukan tanaman spesifik.
-        </p>
-      </div>
-      
-      {/* Fitur Pencarian */}
-      {/* `.search-bar-container` & `.search-bar` */}
-      <div className="mb-12 flex justify-center">
-        <input
-          type="text"
-          placeholder="Cari nama tanaman (e.g., Monstera)..."
-          className="w-full max-w-lg py-3 px-6 text-base border border-gray-300 rounded-full shadow-sm 
-                     focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent
-                     transition-shadow duration-300"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-      </div>
-
-      {/* Grid Galeri Tanaman */}
-      {filteredPlants.length > 0 ? (
-        // `.plants-grid` -> grid classes responsif
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {filteredPlants.map(plant => (
-            <PlantCard key={plant.id} plant={plant} />
-          ))}
+    <div className="bg-stone-50 min-h-screen">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="text-center mb-12">
+          <h2 className="text-4xl sm:text-5xl font-bold text-green-800 mb-4">{t('plantPage.title')}</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">{t('plantPage.description')}</p>
         </div>
-      ) : (
-        // `.no-results`
-        <p className="text-center text-gray-500 text-lg py-16">
-          Oops! Tanaman dengan nama "{searchTerm}" tidak ditemukan.
-        </p>
-      )}
+        <div className="mb-12 flex justify-center">
+          <div className="relative w-full max-w-lg">
+            <input
+              type="text"
+              placeholder={t('plantPage.searchPlaceholder')}
+              className="w-full py-3 pl-12 pr-4 text-base border border-gray-300 rounded-full shadow-sm focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
+          </div>
+        </div>
+        {filteredPlants.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredPlants.map(plant => <PlantCard key={plant.id} plant={plant} />)}
+          </div>
+        ) : (
+          <p className="text-center text-gray-500 text-lg py-16">
+            {t('plantPage.notFound', { searchTerm })}
+          </p>
+        )}
+      </div>
     </div>
   );
 };
 
-export default Plant;
+export default PlantPage;

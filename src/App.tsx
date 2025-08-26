@@ -5,8 +5,10 @@ import Home from './pages/Home';
 import Plant from './pages/Plant';
 import About from './pages/About';
 import Article from './pages/Article';
-import FAQ from './pages/FAQ';
 import Event from './pages/Event';
+import EventDetail from './pages/EventDetail';
+import ArticleDetail from './pages/ArticleDetail';
+import PlantDetail from './pages/PlantDetail';
 
 const App: React.FC = () => {
   return (
@@ -17,8 +19,10 @@ const App: React.FC = () => {
         <Route path="/plants" element={<Plant />} />
         <Route path="/articles" element={<Article />} />
         <Route path="/events" element={<Event />} />
-        <Route path="/faq" element={<FAQ />} />
+        <Route path="/events/:id" element={<EventDetail />} />
         <Route path="/about" element={<About />} />
+        <Route path="/articles/:id" element={<ArticleDetail />} />
+        <Route path="/plants/:id" element={<PlantDetail />} />
       </Routes>
        <Footer /> 
     </>

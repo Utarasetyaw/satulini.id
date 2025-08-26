@@ -1,62 +1,40 @@
-import React from 'react';
-// Tidak perlu import './ArticleCard.css' lagi
+import type { FC } from 'react';
+import { Link } from 'react-router-dom';
+import type { Article } from '../types'; // Menggunakan tipe data terpusat
 
 interface ArticleCardProps {
-  title: string;
-  excerpt: string;
-  imageUrl: string;
-  category?: string;
-  layout?: 'default' | 'horizontal'; // Style bisa 'default' (vertikal) atau 'horizontal'
+  article: Article;
+  layout?: 'default' | 'horizontal';
 }
 
-const ArticleCard: React.FC<ArticleCardProps> = ({ 
-  title, 
-  excerpt, 
-  imageUrl, 
-  category, 
-  layout = 'default' 
-}) => {
-  // Menentukan class utama berdasarkan prop 'layout'
-  const isHorizontal = layout === 'horizontal';
+const ArticleCard: FC<ArticleCardProps> = ({ article, layout = 'default' }) => {
+  const { id, title, excerpt, imageUrl, category } = article;
 
+  if (layout === 'horizontal') {
+    return (
+      <Link to={`/articles/${id}`} className="block bg-white rounded-lg shadow-md overflow-hidden group transition-all duration-300 hover:shadow-xl md:flex">
+        <div className="md:w-1/3">
+          <img src={imageUrl} alt={title} className="w-full h-56 md:h-full object-cover" />
+        </div>
+        <div className="p-6 md:w-2/3">
+          <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">{category}</span>
+          <h3 className="text-2xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">{title}</h3>
+          <p className="text-gray-600 text-sm">{excerpt}</p>
+        </div>
+      </Link>
+    );
+  }
+
+  // Layout default (vertikal)
   return (
-    // Styling kondisional:
-    // - Default: flex-col (tumpukan vertikal)
-    // - Horizontal: md:grid (grid 2 kolom di layar medium ke atas)
-    <div 
-      className={`
-        bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group
-        ${isHorizontal ? 'md:grid md:grid-cols-[200px_1fr] md:gap-6 items-center' : 'flex flex-col'}
-      `}
-    >
-      <div className={isHorizontal ? 'w-full h-full' : 'h-52'}>
-        <img 
-          src={imageUrl} 
-          alt={title} 
-          className={`
-            w-full h-full object-cover transition-transform duration-500
-            ${isHorizontal ? 'md:rounded-lg' : 'group-hover:scale-105'}
-          `}
-        />
+    <Link to={`/articles/${id}`} className="block bg-white rounded-lg shadow-md overflow-hidden group transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
+      <img src={imageUrl} alt={title} className="w-full h-56 object-cover" />
+      <div className="p-6">
+        <span className="inline-block bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full mb-2">{category}</span>
+        <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-green-700 transition-colors">{title}</h3>
+        <p className="text-gray-600 text-sm">{excerpt}</p>
       </div>
-
-      <div className="p-6 flex flex-col flex-grow">
-        {category && (
-          <div className="text-green-800 font-bold uppercase text-xs tracking-wider mb-2">
-            {category}
-          </div>
-        )}
-        <h3 className="text-xl font-semibold text-gray-900 mb-2">
-          {title}
-        </h3>
-        <p className="text-sm text-gray-600 leading-relaxed flex-grow mb-4">
-          {excerpt}
-        </p>
-        <a href="#" className="self-start mt-auto font-bold text-green-800 hover:underline">
-          Baca Selengkapnya →
-        </a>
-      </div>
-    </div>
+    </Link>
   );
 };
 
