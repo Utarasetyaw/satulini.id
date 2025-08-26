@@ -11,7 +11,7 @@ import ArticleCard from '../components/ArticleCard';
 import EventCard from '../components/EventCard';
 import ReviewCard from '../components/ReviewCard';
 import SideAd from '../components/SideAd';
-import InFeedAd from '../components/InFeedAd';
+
 
 // --- Pembagian Data ---
 const featuredArticle = articles[0];
