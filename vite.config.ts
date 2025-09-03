@@ -4,4 +4,12 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  server: {
+    host: true, // Memastikan server Vite bisa diakses dari network
+    hmr: {
+        host: 'localhost',
+    },
+    // Tambahkan baris ini untuk mengizinkan domain Anda
+    allowedHosts: ['satulini.id'], 
+  },
 })
