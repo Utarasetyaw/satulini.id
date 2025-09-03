@@ -2,18 +2,18 @@ import { useState, Fragment } from 'react';
 import type { FC, FormEvent } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-// --- Komponen Ikon ---
+// --- Icon Components ---
 const CheckIcon: FC<{className?: string}> = ({className}) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5"/></svg>);
 const CloseIcon: FC = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></svg> );
 
 // =================================================================================
-// KOMPONEN MODAL WAITING LIST
+// WAITING LIST MODAL COMPONENT
 // =================================================================================
 const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'business' | 'personal'}> = ({ isOpen, onClose, planType }) => {
     
     const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
 
-    // PENTING: Ganti URL ini dengan URL Web App dari Google Apps Script Anda
+    // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
     const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
 
     const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
@@ -28,8 +28,8 @@ const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'bus
                 setStatus('success');
                 setTimeout(() => {
                     onClose();
-                    setTimeout(() => setStatus('idle'), 500); // Reset status setelah modal tertutup
-                }, 2000); // Tutup otomatis setelah 2 detik
+                    setTimeout(() => setStatus('idle'), 500); // Reset status after the modal is closed
+                }, 2000); // Automatically close after 2 seconds
             } else {
                 throw new Error(data.error || 'Unknown error occurred');
             }
@@ -44,10 +44,10 @@ const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'bus
         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <input type="hidden" name="formType" value="Business" />
             <input name="email" type="email" placeholder="Email" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="namaLengkap" type="text" placeholder="Nama Lengkap" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="nomerAktif" type="tel" placeholder="Nomer Aktif" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="namaPerusahaan" type="text" placeholder="Nama Perusahaan" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="produkDigunakan" type="text" placeholder="Produk Digunakan" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="fullName" type="text" placeholder="Full Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="activePhoneNumber" type="tel" placeholder="Active Phone Number" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="companyName" type="text" placeholder="Company Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="productUsed" type="text" placeholder="Product Used" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
             <input name="socialMedia" type="text" placeholder="Social Media (Optional)" className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
             <SubmitButton />
         </form>
@@ -56,9 +56,9 @@ const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'bus
     const PersonalForm = () => (
          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
             <input type="hidden" name="formType" value="Personal" />
-            <input name="nama" type="text" placeholder="Nama" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="name" type="text" placeholder="Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
             <input name="email" type="email" placeholder="Email" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="noTelfon" type="tel" placeholder="No Telfon" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
+            <input name="phoneNumber" type="tel" placeholder="Phone Number" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
             <SubmitButton />
         </form>
     );
@@ -91,7 +91,7 @@ const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'bus
                                 </Dialog.Title>
                                 <div className="mt-4">
                                     <p className="text-sm text-gray-500 text-center">
-                                        Jadilah yang pertama tahu saat paket ini tersedia. Kami akan memberitahu Anda melalui email.
+                                        Be the first to know when this plan is available. We'll notify you by email.
                                     </p>
                                     {planType === 'business' ? <BusinessForm /> : <PersonalForm />}
                                 </div>
@@ -109,19 +109,19 @@ const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'bus
 };
 
 
-// --- Data untuk Paket Harga ---
+// --- Data for Pricing Plans ---
 const businessPlans = [
-    { name: 'Basic', priceMonthly: 100000, priceYearly: 1200000, description: 'Untuk memulai dan mengelola bisnis Anda secara online.', features: ['Toko online standar', 'Manajemen produk', 'Transaksi dasar'], popular: false, },
-    { name: 'Pro', priceMonthly: 250000, priceYearly: 3000000, description: 'Untuk bisnis yang berkembang dan butuh insight lebih.', features: ['Semua fitur Basic', 'Promosi terbatas', 'Analytics dasar', 'Support lebih cepat'], popular: true, },
-    { name: 'Enterprise', priceMonthly: 400000, priceYearly: 4800000, description: 'Solusi lengkap untuk skala besar dan kebutuhan kustom.', features: ['Semua fitur Pro', 'Integrasi API', 'Multi-admin', 'Fitur kustom', 'Support premium'], popular: false, }
+    { name: 'Basic', priceMonthly: 100000, priceYearly: 1200000, description: 'To start and manage your business online.', features: ['Standard online store', 'Product management', 'Basic transactions'], popular: false, },
+    { name: 'Pro', priceMonthly: 250000, priceYearly: 3000000, description: 'For growing businesses that need more insight.', features: ['All Basic features', 'Limited promotions', 'Basic analytics', 'Faster support'], popular: true, },
+    { name: 'Enterprise', priceMonthly: 400000, priceYearly: 4800000, description: 'Complete solution for large-scale and custom needs.', features: ['All Pro features', 'API integration', 'Multi-admin', 'Custom features', 'Premium support'], popular: false, }
 ];
 
 const personalPlans = [
-    { name: 'Free', priceMonthly: 0, description: 'Mulai bangun brand personal Anda tanpa biaya di muka.', features: ['Gratis selamanya', 'Ada potongan per transaksi'], isFree: true, },
-    { name: 'Premium', priceMonthly: 80000, description: 'Maksimalkan potensi online Anda tanpa batas.', features: ['Custom domain', 'Tidak ada potongan transaksi', 'Manajemen sosial media terintegrasi'], isFree: false, }
+    { name: 'Free', priceMonthly: 0, description: 'Start building your personal brand with no upfront cost.', features: ['Free forever', 'Commission per transaction'], isFree: true, },
+    { name: 'Premium', priceMonthly: 80000, description: 'Maximize your online potential without limits.', features: ['Custom domain', 'No transaction fees', 'Integrated social media management'], isFree: false, }
 ];
 
-// --- Komponen Utama Halaman Harga ---
+// --- Main Pricing Page Component ---
 const PricingPage: FC = () => {
     const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
     const [isWaitingListModalOpen, setWaitingListModalOpen] = useState(false);
@@ -134,6 +134,7 @@ const PricingPage: FC = () => {
     const closeWaitingListModal = () => setWaitingListModalOpen(false);
 
     const formatPrice = (price: number) => {
+        // Keeping the IDR format as it might be intentional
         return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
     };
 
@@ -141,13 +142,13 @@ const PricingPage: FC = () => {
         <>
             <div className="bg-white">
                 <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
-                    {/* Judul & Toggle */}
+                    {/* Title & Toggle */}
                     <div className="sm:flex sm:flex-col sm:items-center">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 text-center tracking-tight">
                             Pricing Plans
                         </h1>
                         <p className="mt-5 text-lg sm:text-xl text-gray-500 sm:text-center max-w-3xl">
-                            Pilih paket yang paling sesuai dengan kebutuhan Anda untuk bertumbuh bersama kami, dengan harga yang transparan dan tanpa biaya tersembunyi.
+                            Choose the plan that best suits your needs to grow with us, with transparent pricing and no hidden fees.
                         </p>
                         <div className="relative mt-8 bg-gray-100 rounded-full p-1 flex sm:mx-auto w-full max-w-xs sm:max-w-sm">
                             <button onClick={() => setBillingCycle('monthly')} type="button" className={`${billingCycle === 'monthly' ? 'bg-white shadow-md' : 'text-gray-500'} relative w-1/2 rounded-full py-2.5 text-sm font-semibold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-purple-500 focus:z-10 transition-all`}>
@@ -160,7 +161,7 @@ const PricingPage: FC = () => {
                         </div>
                     </div>
 
-                    {/* Bagian Business */}
+                    {/* Business Section */}
                     <div className="mt-20">
                         <h2 className="text-3xl font-extrabold text-gray-900 mb-10">For Business</h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
@@ -177,7 +178,7 @@ const PricingPage: FC = () => {
                                         <p className="text-5xl font-extrabold text-gray-900">
                                             {formatPrice(billingCycle === 'monthly' ? plan.priceMonthly : plan.priceYearly / 12)}
                                         </p>
-                                        <p className="text-base font-medium text-gray-500">/{billingCycle === 'monthly' ? 'bulan' : 'bulan'}</p>
+                                        <p className="text-base font-medium text-gray-500">/{billingCycle === 'monthly' ? 'month' : 'month'}</p>
                                     </div>
                                     <ul role="list" className="mt-8 space-y-5 flex-1">
                                         {plan.features.map((feature) => (
@@ -195,7 +196,7 @@ const PricingPage: FC = () => {
                         </div>
                     </div>
 
-                    {/* Bagian Personal */}
+                    {/* Personal Section */}
                     <div className="mt-24">
                          <h2 className="text-3xl font-extrabold text-gray-900 mb-10">For Personal</h2>
                         <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
@@ -207,7 +208,7 @@ const PricingPage: FC = () => {
                                         <p className="text-5xl font-extrabold text-gray-900">
                                             {plan.isFree ? 'Free' : formatPrice(plan.priceMonthly)}
                                         </p>
-                                        {!plan.isFree && <p className="text-base font-medium text-gray-500">/bulan</p>}
+                                        {!plan.isFree && <p className="text-base font-medium text-gray-500">/month</p>}
                                     </div>
                                     <ul role="list" className="mt-8 space-y-5 flex-1">
                                         {plan.features.map((feature) => (
@@ -234,4 +235,3 @@ const PricingPage: FC = () => {
 };
 
 export default PricingPage;
-

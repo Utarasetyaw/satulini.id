@@ -6,17 +6,17 @@ import { Transition } from '@headlessui/react';
 // SECTION 1: SETUP & DATA
 // =================================================================================
 
-// Hook palsu untuk tema, agar komponen bisa mandiri
+// Fake hook for theme, to make the component self-contained
 const useTheme = () => {
   const [isDark] = React.useState(false); 
   return { isDark };
 };
 
-// Data untuk fitur produk dinamis di kartu interaktif
+// Data for dynamic product features in the interactive card
 const productFeatures = {
-  bisnis: {
-    title: 'Solusi Lengkap untuk Bisnis Anda',
-    description: 'Alat canggih untuk mengotomatisasi dan mengembangkan operasi bisnis Anda.',
+  business: {
+    title: 'Complete Solution for Your Business',
+    description: 'You can manage your business easily and transparently, and connect with other businesses within one ecosystem.', 
     imageSrc: "https://images.ctfassets.net/w8fc6tgspyjz/3FllRRqmlYB2Bdf3ASg3fT/14ff2e7789c12cfc0a55358c50aa5312/home-tabs-v3-projects-desktop.png",
     features: [
       { 
@@ -37,74 +37,74 @@ const productFeatures = {
     ],
   },
   personal: {
-    title: 'Bangun Brand Personal Anda',
-    description: 'Maksimalkan potensi online Anda dengan website dan alat pemasaran yang kuat.',
+    title: 'Build Your Personal Brand',
+    description: 'Manage your personal account for buying, selling, or offering services, connected to other individuals and businesses in one ecosystem.',
     imageSrc: "https://images.ctfassets.net/w8fc6tgspyjz/ANJFM8HigJCMUwQxflBvU/226711f57db215ba057f50f7a9b68c37/home-tabs-v4-chat-desktop.png",
     features: [
-      { icon: '🖼️', label: 'AI Builder Web Portofolio', imageSrc: undefined },
+      { icon: '🖼️', label: 'AI Web Portfolio Builder', imageSrc: undefined },
       { icon: '🤝', label: 'Affiliate Marketing', imageSrc: undefined },
-      { icon: '💰', label: 'Jual Produk & Jasa', imageSrc: undefined },
+      { icon: '💰', label: 'Sell Products & Services', imageSrc: undefined },
       { icon: '📢', label: 'Digital Marketing Tools', imageSrc: undefined },
     ],
   },
   investor: {
-    title: 'Investasi Cerdas & Transparan',
-    description: 'Dapatkan data dan wawasan untuk keputusan investasi yang lebih baik.',
-    imageSrc: "https://clickup.com/blog/wp-content/uploads/2023/08/new-home-hero-image.png",
+    title: 'Smart & Transparent Investing',
+    description: 'Become a private or individual investor with your crypto assets to invest in businesses within the ecosystem, similar to buying shares in a small business without an IPO.',
+    imageSrc: "https://images.ctfassets.net/w8fc6tgspyjz/ANJFM8HigJCMUwQxflBvU/226711f57db215ba057f50f7a9b68c37/home-tabs-v4-chat-desktop.png",
     features: [
-      { icon: '📊', label: 'Tracking Score Company', imageSrc: undefined },
-      { icon: '⛓️', label: 'Funding Transparance', imageSrc: undefined },
-      { icon: '⚖️', label: 'Acquisition and Marge', imageSrc: undefined },
+      { icon: '📊', label: 'Company Score Tracking', imageSrc: undefined },
+      { icon: '⛓️', label: 'Funding Transparency', imageSrc: undefined },
+      { icon: '⚖️', label: 'Acquisition and Merger', imageSrc: undefined },
     ],
   },
 };
 
 type ProductKey = keyof typeof productFeatures;
 
-// Data untuk bagian logo "Trusted By"
+// Data for the "Trusted By" logo section
 const companyLogos = [
   { name: 'Microsoft', src: 'https://d1n3oewcfgleny.cloudfront.net/assets/MS_Startups.png' },
   { name: 'Supabase', src: 'https://docs.noodl.net/2.9/assets/images/thumb-482e9d6fff2db0af7ec052ddd85e66b0.png' },
 ];
 
-// Data untuk bagian fitur AI & Blockchain
+// Data for the AI & Blockchain feature section
 const featureData = [
   {
     label: "Smart AI Assistant",
-    title: "Satu AI untuk Mengoptimalkan Seluruh Pekerjaan Anda",
-    description: "AI kami bukan sekadar chatbot. Ia terintegrasi secara mendalam ke dalam ekosistem, membantu Anda mengotomatisasi alur kerja, menganalisis data investor, membuat draf proposal bisnis, dan mengoptimalkan personal branding Anda secara instan.",
+    title: "One AI to Optimize Your Entire Workflow",
+    description: "Our AI is more than just a chatbot. It's deeply integrated into the ecosystem, helping you automate workflows, analyze investor data, draft business proposals, and optimize your personal branding instantly.",
     imageSrc: "https://cdn-icons-png.flaticon.com/512/10644/10644640.png",
     imageAlt: "AI Assistant automating workflows",
     imagePosition: 'left',
   },
   {
     label: "Decentralized Core",
-    title: "Transparansi dan Keamanan di Setiap Transaksi",
-    description: "Dibangun di atas jaringan blockchain, platform kami memastikan setiap kesepakatan, kepemilikan saham, dan riwayat proyek tercatat secara permanen dan tidak dapat diubah. Investor mendapatkan transparansi penuh, bisnis beroperasi dengan aman, dan talenta membangun reputasi yang terverifikasi.",
+    title: "Transparency and Security in Every Transaction",
+    description: "Built on a blockchain network, our platform ensures every deal, share ownership, and project history is permanently and immutably recorded. Investors get full transparency, businesses operate securely, and talents build a verified reputation.",
     imageSrc: "https://png.pngtree.com/png-clipart/20230127/original/pngtree-blockchain-vector-icon-png-image_8932227.png",
     imageAlt: "Blockchain network ensuring security",
     imagePosition: 'right',
   },
 ];
 
-// --- PERUBAHAN DI SINI: Data testimoni diperbarui ---
+// --- CHANGE HERE: Testimonial data updated ---
 const testimonialData = [
   {
-    quote: "Satulini merevolusi cara kami mengelola inventaris dan terhubung dengan investor. Transparansi blockchain-nya memberikan kepercayaan, dan alat AI-nya membantu kami menganalisis tren pasar dengan akurasi yang luar biasa.",
+    quote: "Satulini revolutionized how we manage inventory and connect with investors. Its blockchain transparency provides trust, and its AI tools help us analyze market trends with incredible accuracy.",
     author: {
       name: "Mohammad Iqbal",
       title: "Owner, Growroom.id",
     },
   },
   {
-    quote: "Sebagai platform yang berfokus pada produk-produk unik, kami membutuhkan solusi yang bisa mengintegrasikan penjualan, pemasaran, dan branding. Satulini memberikan semua itu dalam satu ekosistem yang powerful dan mudah digunakan.",
+    quote: "As a platform focused on unique products, we needed a solution that could integrate sales, marketing, and branding. Satulini provides it all in one powerful and easy-to-use ecosystem.",
     author: {
       name: "Ebit",
       title: "Owner, Daunx.id",
     },
   },
   {
-    quote: "Akhirnya, sebuah platform di mana saya bisa melakukan due diligence dengan data yang nyata. Alur investasi menjadi 10x lebih efisien dan aman. Ini adalah masa depan angel investing.",
+    quote: "Finally, a platform where I can perform due diligence with real data. The investment flow has become 10x more efficient and secure. This is the future of angel investing.",
     author: {
       name: "Maria G.",
       title: "Angel Investor",
@@ -117,13 +117,13 @@ const testimonialData = [
 // SECTION 2: CHILD COMPONENTS
 // =================================================================================
 
-// Komponen Kartu Interaktif
+// Interactive Card Component
 const DynamicFeatureCard: FC<{
   isDark: boolean, 
   onTabChange: (key: ProductKey) => void,
   onFeatureClick: (imageUrl: string) => void
 }> = ({ isDark, onTabChange, onFeatureClick }) => {
-    const [activeTab, setActiveTab] = useState<ProductKey>('bisnis');
+    const [activeTab, setActiveTab] = useState<ProductKey>('business');
     const currentProduct = productFeatures[activeTab];
 
     const handleTabClick = (tabKey: ProductKey) => {
@@ -154,7 +154,7 @@ const DynamicFeatureCard: FC<{
     return (
         <div className={`rounded-2xl p-6 sm:p-8 transition-colors duration-300 ${isDark ? 'bg-gray-900/70 border-gray-700/50' : 'bg-white/70 border-gray-200/50'} border shadow-2xl backdrop-blur-xl`}>
             <div className={`flex p-1 space-x-1 rounded-xl mb-6 ${isDark ? 'bg-gray-800/60' : 'bg-gray-200/60'}`}>
-                <TabButton tabKey="bisnis">Bisnis</TabButton>
+                <TabButton tabKey="business">Business</TabButton>
                 <TabButton tabKey="personal">Personal</TabButton>
                 <TabButton tabKey="investor">Investor</TabButton>
             </div>
@@ -185,7 +185,7 @@ const DynamicFeatureCard: FC<{
     );
 };
 
-// Komponen "Trusted By"
+// "Trusted By" Component
 const TrustedBy = () => {
   return (
     <div className={`py-16 bg-white`}>
@@ -208,7 +208,7 @@ const TrustedBy = () => {
   );
 };
 
-// Komponen Feature Section (AI & Blockchain)
+// Feature Section Component (AI & Blockchain)
 const FeatureSection = () => {
   return (
     <div className={`relative bg-white pt-24 pb-32 overflow-hidden`}>
@@ -235,16 +235,16 @@ const FeatureSection = () => {
   );
 };
 
-// Komponen Testimonial
+// Testimonial Component
 const Testimonials = () => {
   return (
     <div className={`bg-white py-24 sm:py-32`}>
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className={`text-3xl font-bold tracking-tight sm:text-4xl text-gray-900`}>
-            Testimoni Kami
+            Our Testimonials
           </h2>
-          <p className={`mt-6 text-lg leading-8 text-gray-600`}>Lihat apa yang dikatakan para inovator, developer, dan investor tentang platform kami.</p>
+          <p className={`mt-6 text-lg leading-8 text-gray-600`}>See what innovators, developers, and investors are saying about our platform.</p>
         </div>
         <div className="mx-auto mt-16 flow-root sm:mt-20">
           <div className="-m-4">
@@ -270,15 +270,15 @@ const Testimonials = () => {
   );
 };
 
-// Komponen CTA Penutup
+// Closing CTA Component
 const FinalCTA = () => {
   return (
     <div className={`bg-white`}>
       <div className="max-w-7xl mx-auto py-16 px-6 sm:py-24 lg:px-8">
         <div className="relative isolate overflow-hidden bg-purple-600 shadow-2xl rounded-3xl px-6 pt-16 sm:px-16 md:pt-24 lg:flex lg:gap-x-20 lg:px-24 lg:pt-0">
           <div className="mx-auto max-w-md text-center lg:mx-0 lg:flex-auto lg:py-32 lg:text-left">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Siap untuk Memulai?</h2>
-            <p className="mt-6 text-lg leading-8 text-purple-100">Bergabunglah dengan masa depan dunia kerja. Bangun, berkolaborasi, dan berinvestasi di platform terdesentralisasi yang dapat Anda percayai sepenuhnya.</p>
+            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">Ready to Get Started?</h2>
+            <p className="mt-6 text-lg leading-8 text-purple-100">Join the future of work. Build, collaborate, and invest on a decentralized platform you can fully trust.</p>
             <div className="mt-10 flex items-center justify-center gap-x-6 lg:justify-start">
               <button className="bg-white text-purple-600 hover:bg-purple-50 px-8 py-4 rounded-lg text-lg font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg mb-4">Get started. Join Waiting List</button>
             </div>
@@ -296,7 +296,7 @@ const FinalCTA = () => {
 
 const Home: FC = () => {
   const { isDark } = useTheme();
-  const [activeImageTab, setActiveImageTab] = useState<ProductKey>('bisnis');
+  const [activeImageTab, setActiveImageTab] = useState<ProductKey>('business');
   const [activeFeatureImage, setActiveFeatureImage] = useState<string | null>(null);
 
   const handleTabChange = (tabKey: ProductKey) => {
@@ -316,7 +316,7 @@ const Home: FC = () => {
       <section className={`pt-10 pb-32 overflow-hidden bg-white`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
-            <h1 className={`text-5xl md:text-7xl font-bold mb-8 mt-4 text-gray-900`}>The all-in-one platform for Decentralized Ecosystem</h1>
+            <h1 className={`text-5xl md:text-7xl font-bold mb-8 mt-4 text-gray-900`}>The all-in-one platform for a Decentralized Ecosystem</h1>
             <div className="max-w-3xl mx-auto mb-8">
               <p className={`text-xl md:text-2xl text-gray-700`}>Manage your business, personal website, and investments all in one place—with AI and blockchain helping you.</p>
             </div>
@@ -353,4 +353,3 @@ const Home: FC = () => {
 };
 
 export default Home;
-
