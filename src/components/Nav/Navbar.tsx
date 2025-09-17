@@ -4,17 +4,11 @@ import React, { useState, Fragment } from 'react';
 import type { FC } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Popover, Transition, Disclosure, Dialog } from '@headlessui/react';
-
-// Impor komponen Modal dan logo
 import logo from '../../assets/Logo.png'; 
 import AuthModal from './AuthModal';
 import WalletConnectModal from './WalletConnectModal';
+import SuccessModal from './SuccessModal';
 
-// =================================================================================
-// SECTION 1: INTERFACES, ICONS & DATA
-// =================================================================================
-
-// --- Interface & Tipe Data ---
 interface FeatureItem { 
   icon: React.ReactElement; 
   label: string; 
@@ -31,12 +25,9 @@ interface SolutionsContent {
     [key: string]: SolutionCategory;
 }
 
-// --- Komponen Ikon ---
 const MenuIcon: FC = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" x2="20" y1="12" y2="12" /><line x1="4" x2="20" y1="6" y2="6" /><line x1="4" x2="20" y1="18" y2="18" /></svg> );
 const CloseIcon: FC = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></svg> );
 const ChevronDownIcon: FC<{className?: string}> = ({className}) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="m6 9 6 6 6-6"/></svg>);
-
-// Ikon untuk fitur
 const ShoppingBagIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>);
 const BoxIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>);
 const ShoppingCartIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>);
@@ -52,7 +43,6 @@ const BarChartIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="2
 const LockIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>);
 const ScaleIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m16 16.5-6-3-6 3V2l6-3 6 3v14.5Zm-10 0v-5l6-3 6 3v5l-6 3-6-3Z"/></svg>);
 
-// --- Navigation Data (Translated to English) ---
 const navTexts: { [key: string]: string } = {
     home: "Home",
     tagline: "The all-in-one platform",
@@ -112,11 +102,6 @@ const solutionCategories = [
         iconUrl: 'https://cdn-icons-png.flaticon.com/512/2422/2422793.png'
     },
 ];
-
-
-// =================================================================================
-// SECTION 2: SUB-COMPONENTS
-// =================================================================================
 
 const NavItem: FC<{ to: string; text: string; }> = ({ to, text }) => ( <NavLink to={to} className="flex items-center h-full px-4 py-2 text-sm font-medium text-gray-500 transition-colors rounded-full hover:text-gray-900 hover:bg-black/5">{text}</NavLink> );
 
@@ -225,26 +210,32 @@ const MobileMenu: FC<{ closeMenu: () => void }> = ({ closeMenu }) => {
     );
 }
 
-// =================================================================================
-// SECTION 3: MAIN NAVBAR COMPONENT
-// =================================================================================
 const Navbar: FC = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isWalletModalOpen, setIsWalletModalOpen] = useState(false);
+  const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false);
 
   const openAuthModal = () => setIsAuthModalOpen(true);
-  const closeAuthModal = () => setIsAuthModalOpen(false);
   const openWalletModal = () => setIsWalletModalOpen(true);
+
+  const closeAuthModal = () => setIsAuthModalOpen(false);
   const closeWalletModal = () => setIsWalletModalOpen(false);
+  const closeSuccessModal = () => setIsSuccessModalOpen(false);
+
+  const handleLoginSuccess = () => {
+    setIsAuthModalOpen(false);
+    setIsWalletModalOpen(false);
+    setTimeout(() => {
+      setIsSuccessModalOpen(true);
+    }, 300);
+  };
 
   return (
     <>
       <header className="fixed top-4 left-0 right-0 z-40 px-4">
         <div className="max-w-7xl mx-auto relative flex justify-center items-center h-12">
-          
           <nav className="relative hidden lg:flex items-stretch h-full space-x-2">
-            
             <div className="flex-shrink-0 flex items-center p-2 rounded-full shadow-lg ring-1 bg-white/70 ring-black/5 backdrop-blur-lg h-full">
               <Link to="/" className="flex items-center h-full space-x-3 pr-3">
                 <img src={logo} alt="Satulini Logo" className="h-7 w-auto" />
@@ -260,25 +251,25 @@ const Navbar: FC = () => {
                 <NavItem to="/pricing" text={navTexts['pricing']} />
             </div>
 
-            <div className="flex items-stretch h-full space-x-2">
+            <div className="flex items-stretch h-full">
                 <div className="flex items-center rounded-full shadow-lg ring-1 bg-white/70 ring-black/5 backdrop-blur-lg h-full">
-                    <button onClick={openAuthModal} className="flex items-center h-full px-4 text-sm font-medium text-gray-500 transition-colors hover:bg-black/5 rounded-l-full">Log In</button>
+                    <button 
+                      onClick={openAuthModal} 
+                      className="flex items-center h-full px-5 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-black/5 rounded-l-full"
+                    >
+                      Login
+                    </button>
                     <div className="w-px h-6 my-auto bg-gray-200"></div>
-                    <button onClick={openWalletModal} className="flex items-center h-full gap-x-2 px-4 text-sm font-medium text-gray-500 transition-colors hover:bg-black/5 rounded-r-full">
-                        <img 
-                            src="https://static.vecteezy.com/system/resources/previews/026/362/279/original/digital-wallet-icon-vector.jpg" 
-                            alt="Wallet Icon" 
-                            className="w-5 h-5 rounded-sm"
-                        />
-                        Connect Wallet
+                    <button 
+                      onClick={openWalletModal} 
+                      className="flex items-center h-full px-5 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-black/5 rounded-r-full"
+                    >
+                      Login Web3
                     </button>
                 </div>
-                
-                <button onClick={openAuthModal} className="h-full flex items-center bg-purple-600 hover:bg-purple-700 text-white px-5 rounded-full text-sm font-semibold transition-all duration-200 transform hover:scale-105 shadow-lg">Sign Up</button>
             </div>
           </nav>
 
-          {/* --- PERUBAHAN DI SINI: Menu Mobile Direvisi Total --- */}
           <nav className="relative lg:hidden flex items-center justify-between p-2 rounded-full shadow-lg ring-1 bg-white/80 ring-black/5 backdrop-blur-lg w-full">
               <Link to="/" className="flex-shrink-0 flex items-center p-2">
                 <img src={logo} alt="Satulini Logo" className="h-7 w-auto" />
@@ -322,12 +313,18 @@ const Navbar: FC = () => {
                         </div>
                         <MobileMenu closeMenu={() => setIsMenuOpen(false)} />
                         <div className="mt-6 pt-6 border-t border-gray-200 space-y-3">
-                           <button onClick={() => { openAuthModal(); setIsMenuOpen(false); }} className="block w-full text-center px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50">Log In</button>
-                           <button onClick={() => { openWalletModal(); setIsMenuOpen(false); }} className="flex items-center justify-center w-full gap-x-2 px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50">
-                               <img src="https://static.vecteezy.com/system/resources/previews/026/362/279/original/digital-wallet-icon-vector.jpg" alt="Wallet Icon" className="w-5 h-5 rounded-sm"/>
-                               Connect Wallet
+                           <button 
+                             onClick={() => { openAuthModal(); setIsMenuOpen(false); }} 
+                             className="block w-full text-center px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50"
+                           >
+                             Login
                            </button>
-                           <button onClick={() => { openAuthModal(); setIsMenuOpen(false); }} className="block w-full text-center bg-purple-600 hover:bg-purple-700 text-white px-5 py-3 rounded-lg text-base font-semibold">Sign Up</button>
+                           <button 
+                             onClick={() => { openWalletModal(); setIsMenuOpen(false); }} 
+                             className="block w-full text-center px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50"
+                           >
+                               Login Web3
+                           </button>
                         </div>
                     </Dialog.Panel>
               </Dialog>
@@ -335,11 +332,22 @@ const Navbar: FC = () => {
         </div>
       </header>
       
-      <AuthModal isOpen={isAuthModalOpen} onClose={closeAuthModal} />
-      <WalletConnectModal isOpen={isWalletModalOpen} onClose={closeWalletModal} />
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={closeAuthModal}
+        onLoginSuccess={handleLoginSuccess}
+      />
+      <WalletConnectModal
+        isOpen={isWalletModalOpen}
+        onClose={closeWalletModal}
+        onLoginSuccess={handleLoginSuccess}
+      />
+      <SuccessModal
+        isOpen={isSuccessModalOpen}
+        onClose={closeSuccessModal}
+      />
     </>
   );
 };
 
 export default Navbar;
-
