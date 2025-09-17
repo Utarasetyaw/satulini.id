@@ -82,7 +82,7 @@ const WalletConnectModal: FC<WalletConnectModalProps> = ({ isOpen, onClose, onLo
                     disabled={isLoading}
                     className="w-full flex items-center justify-center gap-x-4 p-4 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors disabled:opacity-50"
                   >
-                     <img src="https://avatars.githubusercontent.com/u/78793368?s=280&v=4" alt="Phantom" className="h-8 w-8 rounded-full"/>
+                     <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple126/v4/70/71/6c/70716c27-0cc2-af23-04b4-eb81c227a727/AppIcon-0-0-1x_U007ephone-0-85-220.png/512x512bb.jpg" alt="Phantom" className="h-8 w-8 rounded-full"/>
                      <div className="text-left flex-grow">
                         <p className="font-semibold text-gray-800">
                           {isLoading ? 'Menunggu...' : 'Sign In with Phantom'}

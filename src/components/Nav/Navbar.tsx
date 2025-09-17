@@ -1,9 +1,10 @@
 'use client'; 
 
-import React, { useState, Fragment } from 'react';
+import React, { useState, Fragment, useEffect } from 'react';
 import type { FC } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Popover, Transition, Disclosure, Dialog } from '@headlessui/react';
+import { supabase } from '../../utils/supabaseClient';
 import logo from '../../assets/Logo.png'; 
 import AuthModal from './AuthModal';
 import WalletConnectModal from './WalletConnectModal';
@@ -221,15 +222,35 @@ const Navbar: FC = () => {
 
   const closeAuthModal = () => setIsAuthModalOpen(false);
   const closeWalletModal = () => setIsWalletModalOpen(false);
-  const closeSuccessModal = () => setIsSuccessModalOpen(false);
+  const closeSuccessModal = () => {
+    setIsSuccessModalOpen(false);
+    sessionStorage.setItem('hasSeenLoginSuccess', 'true');
+  };
 
-  const handleLoginSuccess = () => {
-    setIsAuthModalOpen(false);
-    setIsWalletModalOpen(false);
+  const handleWalletLoginSuccess = () => {
+    closeWalletModal();
     setTimeout(() => {
       setIsSuccessModalOpen(true);
     }, 300);
   };
+  
+  useEffect(() => {
+    const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session && !sessionStorage.getItem('hasSeenLoginSuccess')) {
+        setIsAuthModalOpen(false);
+        setIsWalletModalOpen(false);
+        setIsSuccessModalOpen(true);
+      }
+      
+      if (event === 'SIGNED_OUT') {
+        sessionStorage.removeItem('hasSeenLoginSuccess');
+      }
+    });
+
+    return () => {
+      authListener?.subscription?.unsubscribe();
+    };
+  }, []);
 
   return (
     <>
@@ -257,14 +278,14 @@ const Navbar: FC = () => {
                       onClick={openAuthModal} 
                       className="flex items-center h-full px-5 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-black/5 rounded-l-full"
                     >
-                      Login
+                      Pre Register
                     </button>
                     <div className="w-px h-6 my-auto bg-gray-200"></div>
                     <button 
                       onClick={openWalletModal} 
                       className="flex items-center h-full px-5 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-black/5 rounded-r-full"
                     >
-                      Login Web3
+                      Pre Register Web3
                     </button>
                 </div>
             </div>
@@ -317,13 +338,13 @@ const Navbar: FC = () => {
                              onClick={() => { openAuthModal(); setIsMenuOpen(false); }} 
                              className="block w-full text-center px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50"
                            >
-                             Login
+                             Pre Register
                            </button>
                            <button 
                              onClick={() => { openWalletModal(); setIsMenuOpen(false); }} 
                              className="block w-full text-center px-4 py-3 text-base font-semibold leading-7 text-gray-900 rounded-lg border border-gray-300 hover:bg-gray-50"
                            >
-                               Login Web3
+                               Pre Register Web3
                            </button>
                         </div>
                     </Dialog.Panel>
@@ -335,12 +356,11 @@ const Navbar: FC = () => {
       <AuthModal
         isOpen={isAuthModalOpen}
         onClose={closeAuthModal}
-        onLoginSuccess={handleLoginSuccess}
       />
       <WalletConnectModal
         isOpen={isWalletModalOpen}
         onClose={closeWalletModal}
-        onLoginSuccess={handleLoginSuccess}
+        onLoginSuccess={handleWalletLoginSuccess}
       />
       <SuccessModal
         isOpen={isSuccessModalOpen}
