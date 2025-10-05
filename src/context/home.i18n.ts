@@ -6,20 +6,18 @@ export const translations = {
     // Dynamic Card
     businessTab: "Business",
     personalTab: "Personal",
-    // DIHAPUS: investorTab
     businessCardTitle: "Complete Solution for Your Business",
     businessCardDescription: "You can manage your business easily and transparently, and connect with other businesses within one ecosystem.",
     businessFeature1: "AI Auto Builder E-commerce",
     businessFeature2: "ERP",
     businessFeature3: "POS",
-    businessFeature4: "CMS",
+    businessFeature4: "KOL Management",
     businessFeature5: "Finance Analyst & Report",
     businessFeature6: "Live Chat",
     businessFeature7: "Auto Audit with Blockchain",
-    // DIUBAH: Judul & Deskripsi Personal digabung dengan Investor
+    businessFeature8: "SEO Management",
     personalCardTitle: "For Your Personal & Investment Needs",
     personalCardDescription: "Manage your brand, sell services, and make transparent investments in businesses within the ecosystem using your crypto assets.",
-    // DIUBAH: Fitur Personal & Investor digabung (total 7 fitur)
     personalFeature1: "AI Web Portfolio Builder",
     personalFeature2: "Affiliate Marketing",
     personalFeature3: "Sell Products & Services",
@@ -27,6 +25,7 @@ export const translations = {
     personalFeature5: "Company Score Tracking",
     personalFeature6: "Funding Transparency",
     personalFeature7: "Acquisition and Merger",
+    personalFeature8: "Social Media Integration", // <-- DITAMBAHKAN
     getStartedButton: "Get started with",
     // Trusted By
     trustedByTitle: "Trusted by the world’s leading businesses",
@@ -69,10 +68,11 @@ export const translations = {
     businessFeature1: "E-commerce AI Auto Builder",
     businessFeature2: "ERP",
     businessFeature3: "POS",
-    businessFeature4: "CMS",
+    businessFeature4: "Manajemen KOL",
     businessFeature5: "Analis & Laporan Keuangan",
     businessFeature6: "Live Chat",
     businessFeature7: "Audit Otomatis dengan Blockchain",
+    businessFeature8: "Manajemen SEO",
     personalCardTitle: "Untuk Kebutuhan Pribadi & Investasi Anda",
     personalCardDescription: "Kelola merek Anda, jual layanan, dan lakukan investasi transparan pada bisnis di dalam ekosistem menggunakan aset kripto Anda.",
     personalFeature1: "AI Web Portfolio Builder",
@@ -82,10 +82,11 @@ export const translations = {
     personalFeature5: "Pelacakan Skor Perusahaan",
     personalFeature6: "Transparansi Pendanaan",
     personalFeature7: "Akuisisi dan Merger",
+    personalFeature8: "Integrasi Sosial Media", // <-- DITAMBAHKAN
     getStartedButton: "Mulai dengan",
     // Trusted By
     trustedByTitle: "Dipercaya oleh bisnis terkemuka di dunia",
-    // (Sisa terjemahan 'id' sama seperti sebelumnya)
+    // Features Section
     featureSectionTagline: "10x pekerjaan Anda dengan alat yang lebih cerdas",
     featureSectionTitle: "Alat cerdas untuk alur kerja yang lebih cerdas",
     featureSectionSubtitle: "Bekerja lebih cerdas dalam segala hal.",
@@ -95,6 +96,7 @@ export const translations = {
     feature2Label: "Inti Terdesentralisasi",
     feature2Title: "Transparansi dan Keamanan di Setiap Transaksi",
     feature2Description: "Dibangun di atas jaringan blockchain, platform kami memastikan setiap kesepakatan, kepemilikan saham, dan riwayat proyek dicatat secara permanen dan tidak dapat diubah. Investor mendapatkan transparansi penuh, bisnis beroperasi dengan aman, dan talenta membangun reputasi yang terverifikasi.",
+    // Testimonials
     testimonialsTitle: "Testimoni Kami",
     testimonialsSubtitle: "Lihat apa yang dikatakan oleh para inovator, pengembang, dan investor tentang platform kami.",
     testimonial1Quote: "Satulini merevolusi cara kami mengelola inventaris dan terhubung dengan investor. Transparansi blockchain-nya memberikan kepercayaan, dan alat AI-nya membantu kami menganalisis tren pasar dengan akurasi luar biasa.",
@@ -106,6 +108,7 @@ export const translations = {
     testimonial3Quote: "Akhirnya, sebuah platform di mana saya dapat melakukan uji tuntas dengan data nyata. Alur investasi menjadi 10x lebih efisien dan aman. Ini adalah masa depan investasi malaikat.",
     testimonial3AuthorName: "Maria G.",
     testimonial3AuthorTitle: "Angel Investor",
+    // CTA
     ctaTitle: "Siap Memulai?",
     ctaSubtitle: "Bergabunglah dengan masa depan dunia kerja. Bangun, berkolaborasi, dan berinvestasi di platform terdesentralisasi yang dapat Anda percayai sepenuhnya.",
     ctaButton: "Mulai. Gabung Daftar Tunggu",
@@ -122,10 +125,11 @@ export const translations = {
     businessFeature1: "人工智能自动构建电子商务",
     businessFeature2: "企业资源规划",
     businessFeature3: "销售点",
-    businessFeature4: "内容管理系统",
+    businessFeature4: "KOL管理",
     businessFeature5: "财务分析师与报告",
     businessFeature6: "实时聊天",
     businessFeature7: "使用区块链进行自动审计",
+    businessFeature8: "SEO管理",
     personalCardTitle: "满足您的个人与投资需求",
     personalCardDescription: "管理您的品牌，销售服务，并使用您的加密资产在生态系统内的企业中进行透明投资。",
     personalFeature1: "人工智能网站组合构建器",
@@ -135,10 +139,11 @@ export const translations = {
     personalFeature5: "公司分数跟踪",
     personalFeature6: "资金透明度",
     personalFeature7: "收购与合并",
+    personalFeature8: "社交媒体整合", // <-- DITAMBAHKAN
     getStartedButton: "开始使用",
     // Trusted By
     trustedByTitle: "受到世界领先企业的信赖",
-    // (Sisa terjemahan 'zh' sama seperti sebelumnya)
+    // Features Section
     featureSectionTagline: "用更智能的工具让您的工作效率提高10倍",
     featureSectionTitle: "智能工具，更智能的工作流程",
     featureSectionSubtitle: "在各方面都更智能地工作。",
@@ -148,6 +153,7 @@ export const translations = {
     feature2Label: "去中心化核心",
     feature2Title: "每笔交易的透明度与安全性",
     feature2Description: "建立在区块链网络之上，我们的平台确保每笔交易、股份所有权和项目历史都得到永久和不可篡改的记录。投资者获得完全的透明度，企业安全运营，人才建立经过验证的声誉。",
+    // Testimonials
     testimonialsTitle: "我们的推荐",
     testimonialsSubtitle: "看看创新者、开发者和投资者对我们平台的评价。",
     testimonial1Quote: "Satulini彻底改变了我们管理库存和与投资者联系的方式。其区块链的透明度提供了信任，其AI工具帮助我们以惊人的准确性分析市场趋势。",
@@ -159,6 +165,7 @@ export const translations = {
     testimonial3Quote: "终于有了一个我可以用真实数据进行尽职调查的平台。投资流程变得效率更高、更安全了10倍。这是天使投资的未来。",
     testimonial3AuthorName: "玛丽亚·G。",
     testimonial3AuthorTitle: "天使投资人",
+    // CTA
     ctaTitle: "准备好开始了吗？",
     ctaSubtitle: "加入工作的未来。在一个您完全可以信赖的去中心化平台上构建、协作和投资。",
     ctaButton: "开始。加入等候名单",

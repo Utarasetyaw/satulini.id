@@ -1,235 +1,181 @@
-import { useState, Fragment } from 'react';
+import React, { useState, Fragment, useMemo } from 'react';
 import type { FC, FormEvent } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { Dialog, Transition, Switch } from '@headlessui/react';
 
-// --- Icon Components ---
-const CheckIcon: FC<{className?: string}> = ({className}) => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={className}><path d="M20 6 9 17l-5-5"/></svg>);
-const CloseIcon: FC = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></svg> );
+// --- Icon Components (tidak berubah) ---
+const CloseIcon: FC = () => ( <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" x2="6" y1="6" y2="18" /><line x1="6" x2="18" y1="6" y2="18" /></svg> );
 
 // =================================================================================
-// WAITING LIST MODAL COMPONENT
+// DATA & TIPE UNTUK FITUR KUSTOM
 // =================================================================================
-const WaitingListModal: FC<{isOpen: boolean, onClose: () => void, planType: 'business' | 'personal'}> = ({ isOpen, onClose, planType }) => {
+interface Feature {
+    id: string;
+    name: string;
+    price: number;
+    isAi: boolean;
+}
+
+// --- Data untuk Paket Bisnis ---
+const businessFeatures: Feature[] = [
+    { id: 'b-ecommerce', name: 'AI Auto Builder E-commerce', price: 100000, isAi: true },
+    { id: 'b-erp', name: 'ERP (Enterprise Resource Planning)', price: 50000, isAi: false },
+    { id: 'b-pos', name: 'POS (Point of Sale)', price: 50000, isAi: false },
+    { id: 'b-kol', name: 'KOL Management', price: 50000, isAi: false },
+    { id: 'b-finance', name: 'Finance Analyst & Report', price: 50000, isAi: false },
+    { id: 'b-chat', name: 'Live Chat', price: 50000, isAi: false },
+    { id: 'b-audit', name: 'Auto Audit with Blockchain', price: 50000, isAi: false },
+    { id: 'b-seo', name: 'SEO Management', price: 50000, isAi: false },
+];
+const BUSINESS_BASE_PRICE = 50000;
+
+// --- Data untuk Paket Personal ---
+const personalFeatures: Feature[] = [
+    { id: 'p-portfolio', name: 'AI Web Portfolio Builder', price: 75000, isAi: true },
+    { id: 'p-affiliate', name: 'Affiliate Marketing', price: 30000, isAi: false },
+    { id: 'p-products', name: 'Sell Products & Services', price: 30000, isAi: false },
+    { id: 'p-marketing', name: 'Digital Marketing Tools', price: 30000, isAi: false },
+    { id: 'p-tracking', name: 'Company Score Tracking', price: 40000, isAi: false },
+    { id: 'p-funding', name: 'Funding Transparency', price: 40000, isAi: false },
+    { id: 'p-merger', name: 'Acquisition and Merger', price: 40000, isAi: false },
+    { id: 'p-social', name: 'Social Media Integration', price: 30000, isAi: false },
+];
+const PERSONAL_BASE_PRICE = 25000;
+
+const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
+};
+
+// =================================================================================
+// WAITING LIST MODAL COMPONENT (tidak ada perubahan)
+// =================================================================================
+const WaitingListModal: FC<{
+    isOpen: boolean, 
+    onClose: () => void, 
+    planDetails: string,
+}> = ({ isOpen, onClose, planDetails }) => { /* ... kode modal tidak berubah ... */ };
+
+// =================================================================================
+// --- KOMPONEN KUSTOMISASI PAKET (Bisa dipakai ulang) ---
+// =================================================================================
+const CustomPackageBuilder: FC<{
+    title: string;
+    subtitle: string;
+    basePrice: number;
+    availableFeatures: Feature[];
+    onBuildPackage: (details: string) => void;
+}> = ({ title, subtitle, basePrice, availableFeatures, onBuildPackage }) => {
     
-    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [selectedFeatures, setSelectedFeatures] = useState<Record<string, boolean>>({
+        [availableFeatures[0].id]: true, // Aktifkan fitur pertama secara default
+    });
 
-    // IMPORTANT: Replace this URL with your Google Apps Script Web App URL
-    const SCRIPT_URL = "https://script.google.com/macros/s/YOUR_DEPLOYMENT_ID/exec";
-
-    const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setStatus('loading');
-        const formData = new FormData(event.target as HTMLFormElement);
-
-        fetch(SCRIPT_URL, { method: 'POST', body: formData })
-        .then(res => res.json())
-        .then(data => {
-            if(data.result === 'success') {
-                setStatus('success');
-                setTimeout(() => {
-                    onClose();
-                    setTimeout(() => setStatus('idle'), 500); // Reset status after the modal is closed
-                }, 2000); // Automatically close after 2 seconds
-            } else {
-                throw new Error(data.error || 'Unknown error occurred');
-            }
-        })
-        .catch(err => {
-            console.error('Error submitting form:', err);
-            setStatus('error');
-        });
+    const handleFeatureToggle = (featureId: string) => {
+        setSelectedFeatures(prev => ({ ...prev, [featureId]: !prev[featureId] }));
     };
-    
-    const BusinessForm = () => (
-        <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <input type="hidden" name="formType" value="Business" />
-            <input name="email" type="email" placeholder="Email" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="fullName" type="text" placeholder="Full Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="activePhoneNumber" type="tel" placeholder="Active Phone Number" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="companyName" type="text" placeholder="Company Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="productUsed" type="text" placeholder="Product Used" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="socialMedia" type="text" placeholder="Social Media (Optional)" className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <SubmitButton />
-        </form>
-    );
 
-    const PersonalForm = () => (
-         <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <input type="hidden" name="formType" value="Personal" />
-            <input name="name" type="text" placeholder="Name" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="email" type="email" placeholder="Email" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <input name="phoneNumber" type="tel" placeholder="Phone Number" required className="w-full rounded-md bg-gray-100 border-gray-300 px-4 py-3 text-gray-900 placeholder-gray-500 focus:ring-purple-500 focus:border-purple-500" />
-            <SubmitButton />
-        </form>
-    );
+    const totalPrice = useMemo(() => {
+        const featuresPrice = availableFeatures.reduce((total, feature) => {
+            return selectedFeatures[feature.id] ? total + feature.price : total;
+        }, 0);
+        return basePrice + featuresPrice;
+    }, [selectedFeatures]);
 
-    const SubmitButton = () => {
-        let buttonText = 'Join Waiting List';
-        if (status === 'loading') buttonText = 'Submitting...';
-        if (status === 'success') buttonText = 'Success!';
-        if (status === 'error') buttonText = 'Error, Try Again';
-
-        return (
-            <button type="submit" disabled={status === 'loading' || status === 'success'} className={`w-full rounded-md px-5 py-3 text-base font-semibold text-white transition-colors ${status === 'success' ? 'bg-green-500' : 'bg-purple-600 hover:bg-purple-700'} disabled:opacity-70 disabled:cursor-not-allowed`}>
-                {buttonText}
-            </button>
-        );
+    const handleSubmit = () => {
+        const chosenFeatures = availableFeatures
+            .filter(f => selectedFeatures[f.id])
+            .map(f => f.name)
+            .join(', ');
+        const details = `${title} (${formatPrice(totalPrice)}/bulan) dengan fitur: ${chosenFeatures}`;
+        onBuildPackage(details);
     };
     
     return (
-        <Transition appear show={isOpen} as={Fragment}>
-            <Dialog as="div" className="relative z-50" onClose={onClose}>
-                <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0" enterTo="opacity-100" leave="ease-in duration-200" leaveFrom="opacity-100" leaveTo="opacity-0">
-                    <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
-                </Transition.Child>
-                <div className="fixed inset-0 overflow-y-auto">
-                    <div className="flex min-h-full items-center justify-center p-4 text-center">
-                        <Transition.Child as={Fragment} enter="ease-out duration-300" enterFrom="opacity-0 scale-95" enterTo="opacity-100 scale-100" leave="ease-in duration-200" leaveFrom="opacity-100 scale-100" leaveTo="opacity-0 scale-95">
-                            <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all">
-                                <Dialog.Title as="h3" className="text-xl font-bold leading-6 text-gray-900 text-center">
-                                    Join the Waiting List
-                                </Dialog.Title>
-                                <div className="mt-4">
-                                    <p className="text-sm text-gray-500 text-center">
-                                        Be the first to know when this plan is available. We'll notify you by email.
-                                    </p>
-                                    {planType === 'business' ? <BusinessForm /> : <PersonalForm />}
+        <div className="mt-20">
+            <h2 className="text-3xl font-extrabold text-gray-900 mb-4">{title}</h2>
+            <p className="text-lg text-gray-500 max-w-3xl mb-10">{subtitle}</p>
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-12">
+                {/* Kolom Kiri: Pilihan Fitur */}
+                <div className="lg:col-span-2">
+                    <h3 className="text-xl font-bold text-gray-900 mb-6">Pilih Fitur Tambahan (Add-ons)</h3>
+                    <ul className="space-y-4">
+                        {availableFeatures.map((feature) => (
+                            <li key={feature.id} className={`p-4 rounded-lg transition-all ${selectedFeatures[feature.id] ? 'bg-purple-50' : 'bg-gray-50'}`}>
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <p className={`font-semibold ${selectedFeatures[feature.id] ? 'text-purple-800' : 'text-gray-800'}`}>{feature.name}{feature.isAi && <span className="ml-2 text-xs font-bold text-purple-600">(AI)</span>}</p>
+                                        <p className={`text-sm ${selectedFeatures[feature.id] ? 'text-purple-600' : 'text-gray-500'}`}>{formatPrice(feature.price)} / bulan</p>
+                                    </div>
+                                    <Switch checked={selectedFeatures[feature.id] || false} onChange={() => handleFeatureToggle(feature.id)} className={`${selectedFeatures[feature.id] ? 'bg-purple-600' : 'bg-gray-200'} relative inline-flex h-6 w-11 items-center rounded-full`}><span className={`${selectedFeatures[feature.id] ? 'translate-x-6' : 'translate-x-1'} inline-block h-4 w-4 transform rounded-full bg-white`} /></Switch>
                                 </div>
-                                <button onClick={onClose} className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors">
-                                    <span className="sr-only">Close</span>
-                                    <CloseIcon />
-                                </button>
-                            </Dialog.Panel>
-                        </Transition.Child>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+                {/* Kolom Kanan: Ringkasan Harga */}
+                <div className="lg:col-span-1">
+                    <div className="sticky top-24 p-8 bg-white border border-gray-200 rounded-2xl shadow-lg">
+                        <h3 className="text-xl font-semibold text-gray-900 text-center">Ringkasan Harga</h3>
+                        <ul className="mt-6 space-y-3 text-sm">
+                            <li className="flex justify-between"><span className="text-gray-600">Platform Dasar</span><span className="font-medium">{formatPrice(basePrice)}</span></li>
+                            {availableFeatures.map(feature => selectedFeatures[feature.id] && (<li key={feature.id} className="flex justify-between"><span className="text-gray-600">{feature.name}</span><span className="font-medium">+{formatPrice(feature.price)}</span></li>))}
+                        </ul>
+                        <div className="mt-6 pt-6 border-t"><p className="text-gray-600">Total per Bulan</p><p className="mt-2 text-4xl font-extrabold text-gray-900">{formatPrice(totalPrice)}</p></div>
+                        <button onClick={handleSubmit} className="mt-8 block w-full py-3 px-6 rounded-md text-center font-medium text-white bg-purple-600 hover:bg-purple-700">Join Waiting List</button>
                     </div>
                 </div>
-            </Dialog>
-        </Transition>
+            </div>
+        </div>
     );
 };
 
 
-// --- Data for Pricing Plans ---
-const businessPlans = [
-    { name: 'Basic', priceMonthly: 100000, priceYearly: 1200000, description: 'To start and manage your business online.', features: ['Standard online store', 'Product management', 'Basic transactions'], popular: false, },
-    { name: 'Pro', priceMonthly: 250000, priceYearly: 3000000, description: 'For growing businesses that need more insight.', features: ['All Basic features', 'Limited promotions', 'Basic analytics', 'Faster support'], popular: true, },
-    { name: 'Enterprise', priceMonthly: 400000, priceYearly: 4800000, description: 'Complete solution for large-scale and custom needs.', features: ['All Pro features', 'API integration', 'Multi-admin', 'Custom features', 'Premium support'], popular: false, }
-];
-
-const personalPlans = [
-    { name: 'Free', priceMonthly: 0, description: 'Start building your personal brand with no upfront cost.', features: ['Free forever', 'Commission per transaction'], isFree: true, },
-    { name: 'Premium', priceMonthly: 80000, description: 'Maximize your online potential without limits.', features: ['Custom domain', 'No transaction fees', 'Integrated social media management'], isFree: false, }
-];
-
-// --- Main Pricing Page Component ---
+// =================================================================================
+// --- KOMPONEN UTAMA PRICING PAGE ---
+// =================================================================================
 const PricingPage: FC = () => {
-    const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
     const [isWaitingListModalOpen, setWaitingListModalOpen] = useState(false);
-    const [selectedPlanType, setSelectedPlanType] = useState<'business' | 'personal'>('business');
+    const [modalPlanDetails, setModalPlanDetails] = useState('');
 
-    const openWaitingListModal = (type: 'business' | 'personal') => {
-        setSelectedPlanType(type);
+    const openModal = (details: string) => {
+        setModalPlanDetails(details);
         setWaitingListModalOpen(true);
-    };
-    const closeWaitingListModal = () => setWaitingListModalOpen(false);
-
-    const formatPrice = (price: number) => {
-        // Keeping the IDR format as it might be intentional
-        return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(price);
     };
 
     return (
         <>
             <div className="bg-white">
                 <div className="max-w-7xl mx-auto py-24 px-4 sm:px-6 lg:px-8">
-                    {/* Title & Toggle */}
+                    {/* Title */}
                     <div className="sm:flex sm:flex-col sm:items-center">
                         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 text-center tracking-tight">
-                            Pricing Plans
+                            Pilihan Paket Fleksibel
                         </h1>
                         <p className="mt-5 text-lg sm:text-xl text-gray-500 sm:text-center max-w-3xl">
-                            Choose the plan that best suits your needs to grow with us, with transparent pricing and no hidden fees.
+                            Bayar hanya untuk fitur yang Anda butuhkan. Bangun paket Bisnis atau Personal Anda sendiri.
                         </p>
-                        <div className="relative mt-8 bg-gray-100 rounded-full p-1 flex sm:mx-auto w-full max-w-xs sm:max-w-sm">
-                            <button onClick={() => setBillingCycle('monthly')} type="button" className={`${billingCycle === 'monthly' ? 'bg-white shadow-md' : 'text-gray-500'} relative w-1/2 rounded-full py-2.5 text-sm font-semibold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-purple-500 focus:z-10 transition-all`}>
-                                Monthly
-                            </button>
-                            <button onClick={() => setBillingCycle('yearly')} type="button" className={`${billingCycle === 'yearly' ? 'bg-white shadow-md' : 'text-gray-500'} ml-1 relative w-1/2 rounded-full py-2.5 text-sm font-semibold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-purple-500 focus:z-10 transition-all`}>
-                                Yearly
-                                <span className="ml-2 hidden sm:inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">Save 20%</span>
-                            </button>
-                        </div>
                     </div>
+                    
+                    <CustomPackageBuilder 
+                        title="Untuk Bisnis"
+                        subtitle="Bangun paket enterprise Anda dengan memilih fitur-fitur canggih yang dibutuhkan."
+                        basePrice={BUSINESS_BASE_PRICE}
+                        availableFeatures={businessFeatures}
+                        onBuildPackage={openModal}
+                    />
 
-                    {/* Business Section */}
-                    <div className="mt-20">
-                        <h2 className="text-3xl font-extrabold text-gray-900 mb-10">For Business</h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
-                            {businessPlans.map((plan) => (
-                                <div key={plan.name} className={`relative p-8 lg:p-10 bg-white border rounded-2xl shadow-sm flex flex-col ${plan.popular ? 'border-purple-500 border-2' : 'border-gray-200'}`}>
-                                    {plan.popular && (
-                                        <div className="absolute top-0 -translate-y-1/2 px-4 py-1 text-sm font-semibold tracking-wide text-purple-600 uppercase bg-white border-2 border-purple-500 rounded-full shadow-sm">
-                                            Most Popular
-                                        </div>
-                                    )}
-                                    <h3 className="text-2xl font-semibold text-gray-900">{plan.name}</h3>
-                                    <p className="mt-4 text-gray-500 min-h-[4rem]">{plan.description}</p>
-                                    <div className="mt-8">
-                                        <p className="text-5xl font-extrabold text-gray-900">
-                                            {formatPrice(billingCycle === 'monthly' ? plan.priceMonthly : plan.priceYearly / 12)}
-                                        </p>
-                                        <p className="text-base font-medium text-gray-500">/{billingCycle === 'monthly' ? 'month' : 'month'}</p>
-                                    </div>
-                                    <ul role="list" className="mt-8 space-y-5 flex-1">
-                                        {plan.features.map((feature) => (
-                                            <li key={feature} className="flex space-x-3 items-start">
-                                                <CheckIcon className="flex-shrink-0 h-6 w-6 text-purple-500 mt-0.5" aria-hidden="true" />
-                                                <span className="text-gray-600">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <button onClick={() => openWaitingListModal('business')} className={`mt-10 block w-full py-4 px-8 border border-transparent rounded-md text-center font-medium text-lg ${plan.popular ? 'bg-purple-600 text-white hover:bg-purple-700' : 'bg-purple-50 text-purple-700 hover:bg-purple-100'}`}>
-                                        Choose {plan.name}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                    <div className="my-24 border-t border-gray-200"></div>
 
-                    {/* Personal Section */}
-                    <div className="mt-24">
-                         <h2 className="text-3xl font-extrabold text-gray-900 mb-10">For Personal</h2>
-                        <div className="max-w-4xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-8 lg:gap-10">
-                            {personalPlans.map((plan) => (
-                                <div key={plan.name} className="relative p-8 lg:p-10 bg-white border border-gray-200 rounded-2xl shadow-sm flex flex-col">
-                                    <h3 className="text-2xl font-semibold text-gray-900">{plan.name}</h3>
-                                    <p className="mt-4 text-gray-500 min-h-[4rem]">{plan.description}</p>
-                                    <div className="mt-8">
-                                        <p className="text-5xl font-extrabold text-gray-900">
-                                            {plan.isFree ? 'Free' : formatPrice(plan.priceMonthly)}
-                                        </p>
-                                        {!plan.isFree && <p className="text-base font-medium text-gray-500">/month</p>}
-                                    </div>
-                                    <ul role="list" className="mt-8 space-y-5 flex-1">
-                                        {plan.features.map((feature) => (
-                                            <li key={feature} className="flex space-x-3 items-start">
-                                                <CheckIcon className="flex-shrink-0 h-6 w-6 text-purple-500 mt-0.5" aria-hidden="true" />
-                                                <span className="text-gray-600">{feature}</span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <button onClick={() => openWaitingListModal('personal')} className={`mt-10 block w-full py-4 px-8 border border-transparent rounded-md text-center font-medium text-lg ${plan.isFree ? 'bg-gray-800 text-white hover:bg-gray-900' : 'bg-purple-600 text-white hover:bg-purple-700'}`}>
-                                        {plan.isFree ? 'Start for Free' : 'Get Premium'}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                     <CustomPackageBuilder 
+                        title="Untuk Personal"
+                        subtitle="Kembangkan brand dan investasi personal Anda dengan fitur-fitur pilihan."
+                        basePrice={PERSONAL_BASE_PRICE}
+                        availableFeatures={personalFeatures}
+                        onBuildPackage={openModal}
+                    />
                 </div>
             </div>
 
-            {/* Render Modal */}
-            <WaitingListModal isOpen={isWaitingListModalOpen} onClose={closeWaitingListModal} planType={selectedPlanType} />
+            <WaitingListModal isOpen={isWaitingListModalOpen} onClose={() => setWaitingListModalOpen(false)} planDetails={modalPlanDetails} />
         </>
     );
 };

@@ -1,13 +1,61 @@
+import React, { useMemo } from 'react';
 import type { FC } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProductBySlug } from '../data/productData'; // Adjust path if necessary
+
+// --- Menggunakan ikon dari Ant Design agar konsisten ---
+import {
+    ShoppingOutlined,
+    BoxPlotOutlined,
+    ShoppingCartOutlined,
+    EditOutlined,
+    RiseOutlined,
+    MessageOutlined,
+    LinkOutlined,
+    SearchOutlined,
+    PictureOutlined,
+    TeamOutlined,
+    DollarCircleOutlined,
+    SoundOutlined,
+    BarChartOutlined,
+    FundProjectionScreenOutlined,
+    GoldOutlined,
+    MobileOutlined,
+} from '@ant-design/icons';
+
+// =================================================================================
+// --- DATA PRODUK BARU (LOKAL) ---
+// Data ini menggantikan 'productData.tsx' yang telah dihapus
+// =================================================================================
+const allProducts = [
+    // Business Features
+    { slug: 'ai-auto-builder-e-commerce', label: 'AI Auto Builder E-commerce', description: 'Create and manage your online store with the power of AI.', icon: <ShoppingOutlined /> },
+    { slug: 'erp', label: 'ERP', description: 'Integrated system to manage all company resources.', icon: <BoxPlotOutlined /> },
+    { slug: 'pos', label: 'POS', description: 'Modern Point of Sale solution for seamless transactions.', icon: <ShoppingCartOutlined /> },
+    { slug: 'kol-management', label: 'KOL Management', description: 'Find, manage, and collaborate with Key Opinion Leaders.', icon: <EditOutlined /> },
+    { slug: 'finance-analyst-report', label: 'Finance Analyst & Report', description: 'Get deep financial insights with AI analysis.', icon: <RiseOutlined /> },
+    { slug: 'live-chat', label: 'Live Chat', description: 'Interact directly with your customers in real-time.', icon: <MessageOutlined /> },
+    { slug: 'auto-audit-blockchain', label: 'Auto Audit with Blockchain', description: 'Enhance transparency and security with blockchain-based automated audits.', icon: <LinkOutlined /> },
+    { slug: 'seo-management', label: 'SEO Management', description: 'Analyze and improve your site’s search engine performance.', icon: <SearchOutlined /> },
+    // Personal Features
+    { slug: 'ai-web-portfolio-builder', label: 'AI Web Portfolio Builder', description: 'Create a stunning professional portfolio in minutes.', icon: <PictureOutlined /> },
+    { slug: 'affiliate-marketing', label: 'Affiliate Marketing', description: 'Grow your network and earn income through affiliate programs.', icon: <TeamOutlined /> },
+    { slug: 'sell-products-services', label: 'Sell Products & Services', description: 'Monetize your skills by selling digital products or services.', icon: <DollarCircleOutlined /> },
+    { slug: 'digital-marketing-tools', label: 'Digital Marketing Tools', description: 'A complete toolkit to reach a wider audience.', icon: <SoundOutlined /> },
+    { slug: 'company-score-tracking', label: 'Company Score Tracking', description: 'Analyze and track company performance in real-time.', icon: <BarChartOutlined /> },
+    { slug: 'funding-transparency', label: 'Funding Transparency', description: 'Ensure every funding transaction is transparently recorded on the blockchain.', icon: <FundProjectionScreenOutlined /> },
+    { slug: 'acquisition-merger', label: 'Acquisition and Merger', description: 'Facilitate acquisition and merger processes with verified data.', icon: <GoldOutlined /> },
+    { slug: 'social-media-integration', label: 'Social Media Integration', description: 'Manage and analyze all your connected social media accounts in one place.', icon: <MobileOutlined /> },
+];
+
 
 // --- Placeholder Icon Component ---
-const CheckCircleIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>);
+const CheckCircleIcon: FC = () => (<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>);
 
 const ProductPage: FC = () => {
     const { slug } = useParams<{ slug: string }>();
-    const product = getProductBySlug(slug);
+
+    // PERBAIKAN: Mencari produk dari array lokal, bukan dari file eksternal
+    const product = useMemo(() => allProducts.find(p => p.slug === slug), [slug]);
 
     if (!product) {
         return (
@@ -30,7 +78,8 @@ const ProductPage: FC = () => {
             <div className="bg-purple-50">
                 <div className="max-w-4xl mx-auto py-20 px-4 sm:py-28 sm:px-6 lg:px-8 text-center">
                     <div className="flex justify-center items-center mx-auto mb-6 w-20 h-20 rounded-2xl bg-white text-purple-600 shadow-md">
-                        {product.icon}
+                        {/* Menggunakan React.cloneElement untuk mengatur ukuran ikon */}
+                        {React.cloneElement(product.icon, { style: { fontSize: '40px' } })}
                     </div>
                     <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
                         {product.label}
@@ -59,7 +108,6 @@ const ProductPage: FC = () => {
             <div className="py-16 sm:py-24 lg:py-32">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     
-                    {/* Placeholder: Key Features */}
                     <div className="text-center">
                         <h2 className="text-3xl font-extrabold text-gray-900">Key Features</h2>
                         <p className="mt-4 text-lg text-gray-500">The main benefits of using {product.label}.</p>
@@ -88,7 +136,6 @@ const ProductPage: FC = () => {
                         </div>
                     </div>
 
-                    {/* Placeholder: How it Works */}
                     <div className="mt-24 text-center">
                          <h2 className="text-3xl font-extrabold text-gray-900">How It Works</h2>
                          <p className="mt-4 text-lg text-gray-500">Simple steps to start using {product.label}.</p>

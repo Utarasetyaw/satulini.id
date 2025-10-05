@@ -1,14 +1,25 @@
-// src/components/Navbar/navData.tsx
 import React from 'react';
-// DIUBAH: Path impor diperbaiki ke file nav.i18n
-import type { TranslationKey } from '../../context/nav.i18n';
+// Impor ikon dari Ant Design
 import {
-    ShoppingBagIcon, BoxIcon, ShoppingCartIcon, ClipboardIcon, TrendingUpIcon, MessageCircleIcon, LinkIcon,
-    ImagePlusIcon, HandshakeIcon, DollarSignIcon, MegaphoneIcon,
-    BarChartIcon, LockIcon, ScaleIcon
-} from './Icons';
+    ShoppingOutlined,
+    BoxPlotOutlined,
+    ShoppingCartOutlined,
+    EditOutlined,
+    RiseOutlined,
+    MessageOutlined,
+    LinkOutlined,
+    SearchOutlined,
+    PictureOutlined,
+    TeamOutlined,
+    DollarCircleOutlined,
+    SoundOutlined,
+    BarChartOutlined,
+    FundProjectionScreenOutlined,
+    GoldOutlined,
+    MobileOutlined,
+} from '@ant-design/icons';
 
-// Definisi Tipe/Interface untuk struktur data
+// Definisi Tipe/Interface
 export interface FeatureItem { 
     icon: React.ReactElement; 
     label: string; 
@@ -25,57 +36,61 @@ export interface SolutionsContent {
     [key: string]: SolutionCategory;
 }
 
-// Data utama untuk konten Mega Menu
+// =================================================================================
+// --- DATA BARU: Link Navigasi Utama ---
+// =================================================================================
+export const mainNavLinks = [
+    { label: 'Home', to: '/' },
+    { label: 'Pricing', to: '/pricing' },
+    { label: 'Product', to: '#', hasMegaMenu: true }, 
+];
+
+// =================================================================================
+// --- Data utama untuk konten Mega Menu (Lengkap & Sesuai Fitur Terbaru) ---
+// =================================================================================
 export const solutionsMegaMenuContent: SolutionsContent = {
   business: {
     title: 'Complete Solution for Your Business',
     description: 'Advanced tools to automate and grow your business operations.',
     features: [
-      { icon: <ShoppingBagIcon />, label: 'AI Auto Builder E-commerce', to: '/product/ai-auto-builder-e-commerce' },
-      { icon: <BoxIcon />, label: 'ERP', to: '/product/erp' },
-      { icon: <ShoppingCartIcon />, label: 'POS', to: '/product/pos' },
-      { icon: <ClipboardIcon />, label: 'CMS', to: '/product/cms' },
-      { icon: <TrendingUpIcon />, label: 'Finance Analyst & Report', to: '/product/finance-analyst-report' },
-      { icon: <MessageCircleIcon />, label: 'Live Chat', to: '/product/live-chat' },
-      { icon: <LinkIcon />, label: 'Auto Audit with Blockchain', to: '/product/auto-audit-blockchain' },
+      { icon: <ShoppingOutlined />, label: 'AI Auto Builder E-commerce', to: '/product/ai-auto-builder-e-commerce' },
+      { icon: <BoxPlotOutlined />, label: 'ERP', to: '/product/erp' },
+      { icon: <ShoppingCartOutlined />, label: 'POS', to: '/product/pos' },
+      { icon: <EditOutlined />, label: 'KOL Management', to: '/product/kol-management' },
+      { icon: <RiseOutlined />, label: 'Finance Analyst & Report', to: '/product/finance-analyst-report' },
+      { icon: <MessageOutlined />, label: 'Live Chat', to: '/product/live-chat' },
+      { icon: <LinkOutlined />, label: 'Auto Audit with Blockchain', to: '/product/auto-audit-blockchain' },
+      { icon: <SearchOutlined />, label: 'SEO Management', to: '/product/seo-management' },
     ],
   },
   personal: {
-    title: 'Build Your Personal Brand',
-    description: 'Maximize your online potential with a powerful website and marketing tools.',
+    title: 'For Your Personal & Investment Needs',
+    description: 'Manage your brand, sell services, and make transparent investments within the ecosystem.',
     features: [
-      { icon: <ImagePlusIcon />, label: 'AI Builder Web Portfolio', to: '/product/ai-builder-web-portofolio' },
-      { icon: <HandshakeIcon />, label: 'Affiliate Marketing', to: '/product/affiliate-marketing' },
-      { icon: <DollarSignIcon />, label: 'Sell Products & Services', to: '/product/sell-products-services' },
-      { icon: <MegaphoneIcon />, label: 'Digital Marketing Tools', to: '/product/digital-marketing-tools' },
-    ],
-  },
-  investor: {
-    title: 'Smart & Transparent Investments',
-    description: 'Get data and insights for better investment decisions.',
-    features: [
-      { icon: <BarChartIcon />, label: 'Tracking Score Company', to: '/product/tracking-score-company' },
-      { icon: <LockIcon />, label: 'Funding Transparency', to: '/product/funding-transparency' },
-      { icon: <ScaleIcon />, label: 'Acquisition and Merger', to: '/product/acquisition-merger' },
+      { icon: <PictureOutlined />, label: 'AI Web Portfolio Builder', to: '/product/ai-web-portfolio-builder' },
+      { icon: <TeamOutlined />, label: 'Affiliate Marketing', to: '/product/affiliate-marketing' },
+      { icon: <DollarCircleOutlined />, label: 'Sell Products & Services', to: '/product/sell-products-services' },
+      { icon: <SoundOutlined />, label: 'Digital Marketing Tools', to: '/product/digital-marketing-tools' },
+      { icon: <BarChartOutlined />, label: 'Company Score Tracking', to: '/product/company-score-tracking' },
+      { icon: <FundProjectionScreenOutlined />, label: 'Funding Transparency', to: '/product/funding-transparency' },
+      { icon: <GoldOutlined />, label: 'Acquisition and Merger', to: '/product/acquisition-merger' },
+      { icon: <MobileOutlined />, label: 'Social Media Integration', to: '/product/social-media-integration' },
     ],
   },
 };
 
-// Data untuk kategori solusi, digunakan di menu
+// =================================================================================
+// --- Data untuk kategori solusi (Lengkap) ---
+// =================================================================================
 export const solutionCategories = [
     { 
         id: 'business', 
-        nameKey: 'businessTitle' as TranslationKey,
+        name: 'Business',
         iconUrl: 'https://cdn.iconscout.com/icon/premium/png-256-thumb/big-business-2453818-2030375.png' 
     },
     { 
         id: 'personal', 
-        nameKey: 'personalTitle' as TranslationKey,
+        name: 'Personal & Investment',
         iconUrl: 'https://cdn-icons-png.flaticon.com/512/1077/1077114.png'
-    },
-    { 
-        id: 'investor', 
-        nameKey: 'investorTitle' as TranslationKey,
-        iconUrl: 'https://cdn-icons-png.flaticon.com/512/2422/2422793.png'
     },
 ];

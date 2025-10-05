@@ -4,10 +4,9 @@ import { Link } from 'react-router-dom';
 import { Disclosure, Transition } from '@headlessui/react';
 import { useLanguage } from '../../../context/LanguageContext';
 import { MenuIcon, CloseIcon } from '../Icons';
-import { VerticalMenu } from './VerticalMenu';
+import { VerticalMenu } from './VerticalMenu'; // Komponen ini yang akan kita ubah
 import logo from '../../../assets/Logo.png';
 
-// Tipe props disederhanakan, tidak perlu lagi state isMobileMenuOpen
 interface MobileNavProps {
     openAuthModal: () => void;
     openWalletModal: () => void;
@@ -17,11 +16,9 @@ export const MobileNav: FC<MobileNavProps> = ({ openAuthModal, openWalletModal }
     const { t } = useLanguage();
 
     return (
-        // Komponen ini hanya akan tampil di layar mobile (< 768px)
-        <nav className="relative md:hidden">
+        <nav className="relative lg:hidden">
             <Disclosure>
                 {({ open, close }) => (
-                    // REVISI: Menggunakan `rounded-2xl` secara konsisten
                     <div className={`w-full shadow-lg ring-1 bg-white/80 ring-black/5 backdrop-blur-lg rounded-2xl`}>
                         {/* Bagian Navbar yang selalu terlihat */}
                         <div className="flex justify-between items-center h-16 p-2">
