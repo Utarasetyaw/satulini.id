@@ -3,11 +3,15 @@ import { useMemo } from 'react';
 import { Routes, Route, Outlet, Link } from 'react-router-dom';
 
 // --- Impor Komponen Halaman dan Layout ---
-import Navbar from './components/Nav/Navbar';
+import Navbar from './components/Nav/index';
 import Footer from './components/Footer';
-import Home from './pages/Home';
+import Home from './pages/HomePage';
 import PricingPage from './pages/PricingPage';
 import ProductPage from './pages/ProductPage';
+
+// --- Impor Provider Bahasa ---
+// DITAMBAHKAN: Ini adalah langkah kunci untuk memperbaiki error
+import { LanguageProvider } from './context/LanguageContext';
 
 // --- Impor semua library untuk Wallet ---
 // Solana
@@ -18,7 +22,6 @@ import { clusterApiUrl } from '@solana/web3.js';
 import '@solana/wallet-adapter-react-ui/styles.css';
 
 // Ethereum
-// PERBAIKAN: Menghapus tanda hubung ekstra dari nama paket
 import { Web3ReactProvider } from '@web3-react/core'; 
 import { Web3Provider } from '@ethersproject/providers';
 
@@ -64,39 +67,41 @@ const App: FC = () => {
   );
 
   return (
-    // Membungkus seluruh aplikasi dengan Wallet Provider
-    <Web3ReactProvider getLibrary={getLibrary}>
-      <ConnectionProvider endpoint={endpoint}>
-        <WalletProvider wallets={wallets} autoConnect>
-        
-          {/* Struktur routing Anda */}
-          <Routes>
-            <Route path="/" element={<MainLayout />}>
-              <Route index element={<Home />} />
-              <Route path="pricing" element={<PricingPage />} />
-              <Route path="product/:slug" element={<ProductPage />} />
-            </Route>
+    // DIUBAH: LanguageProvider sekarang membungkus SEMUANYA
+    <LanguageProvider>
+        <Web3ReactProvider getLibrary={getLibrary}>
+          <ConnectionProvider endpoint={endpoint}>
+            <WalletProvider wallets={wallets} autoConnect>
+            
+              {/* Struktur routing Anda */}
+              <Routes>
+                <Route path="/" element={<MainLayout />}>
+                  <Route index element={<Home />} />
+                  <Route path="pricing" element={<PricingPage />} />
+                  <Route path="product/:slug" element={<ProductPage />} />
+                </Route>
 
-            <Route 
-              path="*" 
-              element={
-                <div className="flex items-center justify-center h-screen bg-gray-100">
-                  <div className="text-center">
-                    <h1 className="text-6xl font-bold text-purple-600">404</h1>
-                    <p className="text-2xl font-medium text-gray-800 mt-4">Halaman Tidak Ditemukan</p>
-                    <p className="text-gray-500 mt-2">Maaf, halaman yang Anda cari tidak ada.</p>
-                    <Link to="/" className="mt-6 inline-block bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition">
-                      Kembali ke Beranda
-                    </Link>
-                  </div>
-                </div>
-              } 
-            />
-          </Routes>
-          
-        </WalletProvider>
-      </ConnectionProvider>
-    </Web3ReactProvider>
+                <Route 
+                  path="*" 
+                  element={
+                    <div className="flex items-center justify-center h-screen bg-gray-100">
+                      <div className="text-center">
+                        <h1 className="text-6xl font-bold text-purple-600">404</h1>
+                        <p className="text-2xl font-medium text-gray-800 mt-4">Halaman Tidak Ditemukan</p>
+                        <p className="text-gray-500 mt-2">Maaf, halaman yang Anda cari tidak ada.</p>
+                        <Link to="/" className="mt-6 inline-block bg-purple-600 text-white font-semibold px-6 py-3 rounded-md hover:bg-purple-700 transition">
+                          Kembali ke Beranda
+                        </Link>
+                      </div>
+                    </div>
+                  } 
+                />
+              </Routes>
+              
+            </WalletProvider>
+          </ConnectionProvider>
+        </Web3ReactProvider>
+    </LanguageProvider>
   );
 };
 
